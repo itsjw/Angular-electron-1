@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen ,ipcMain} from 'electron';
 import * as path from 'path';
 
 let win, serve;
@@ -10,6 +10,21 @@ if (serve) {
   });
 }
 
+ipcMain.on('min',e => win.minimize());
+ipcMain.on('max',e => {
+  if(win.isMaximized()){
+    win.unmaximize()
+   }else{
+    win.maximize()
+  }
+})
+ipcMain.on('close', e => {
+  win.close();
+  // window.localStorage.removeItem('type');
+
+})
+
+
 function createWindow() {
 
   const electronScreen = screen;
@@ -17,10 +32,16 @@ function createWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height
+    // x: 0,
+    // y: 0,
+    width: 1000,
+    minWidth:1000,
+    maxWidth:1000,
+    height: 600, 
+    minHeight:600,
+    maxHeight:600,
+    frame:false,
+    // fullscreen:true 
   });
 
   // and load the index.html of the app.
